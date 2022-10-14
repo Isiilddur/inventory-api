@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id       String  @id @default(uuid())
+  username String  @unique
+  password String
+  name     String
+  phone    String?
+  role     role    @default(USER)
+  active   Boolean @default(true)
+}
+
+enum role {
+  USER
+  ADMIN
+}
+
+model product {
+  id         String               @id @default(uuid())
+  name       String
+  store      store                @relation(fields: [storeId], references: [id])
+  storeId    String
+  price      Decimal
+  unit       unit
+  weight     Decimal?
+  pieces     Int?
+  category   category             @relation(fields: [categoryId], references: [id])
+  categoryId String
+  orders     products_on_orders[]
+}
+
+enum unit {
+  KILOS
+  GRAMOS
+  PIEZAS
+}
+
+model store {
+  id       String    @id @default(uuid())
+  name     String
+  products product[]
+}
+
+model category {
+  id       String    @id @default(uuid())
+  name     String
+  products product[]
+}
+
+model client {
+  id      String  @id @default(uuid())
+  name    String
+  rfc     String?
+  phone   String?
+  address String?
+  orders  order[]
+}
+
+model order {
+  id       String               @id @default(uuid())
+  client   client               @relation(fields: [clientId], references: [id])
+  clientId String
+  products products_on_orders[]
+  total    Decimal
+  status   status
+  date     DateTime
+}
+
+model products_on_orders {
+  product   product @relation(fields: [productId], references: [id])
+  productId String
+  order     order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  quantity  Int
+
+  @@id([productId, orderId])
+}
+
+enum status {
+  ON_TIME
+  DELAYED
+  PAYED
+}
