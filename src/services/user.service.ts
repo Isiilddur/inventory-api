@@ -1,10 +1,13 @@
 import { PrismaClient } from "@prisma/client";
-import User from "../models/User";
+//import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
 const createUser = async (body: any) => {
-  const { username, password, name, phone, role } = body;
+  let { username, password, name, phone, role } = body;
+  //const salt = bcrypt.genSaltSync();
+  //password = bcrypt.hashSync(password, salt);
+
   let result = await prisma.user.create({
     data: {
       username: username,
@@ -14,6 +17,9 @@ const createUser = async (body: any) => {
       role: role,
     },
   });
+  result.password = "";
+  
+
   return result;
 };
 

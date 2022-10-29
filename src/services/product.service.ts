@@ -1,58 +1,103 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, unit } from "@prisma/client";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 const createProduct = async (body: any) => {
-    try{
-        
-        let result = await prisma.user.create({
-            data:body
-        })
-        return(result)
-        
-    }catch (e){
-        return("bad")
-    }
-}
+  let result = await prisma.product.create({
+    data: body,
+  });
+  return result;
+};
 
 const updateProduct = async (body: any) => {
-    try{
-        const {username,password,name,phone, id} = body
-        let result = await prisma.user.update({
-            where:{
-                id: id
-            },
-            data:body
-        })
-        return(result)
-        
-    }catch (e){
-        return("bad")
-    }
-}
-// const findProduct = async (body: any) => {
-//     try{
-//         const {username,password,name,phone} = body
-//         let result = await prisma.user.find({
-//             data:{username,password,name,phone}
-//         })
-//         return(result)
-        
-//     }catch (e){
-//         return("bad")
-//     }
-// }
-const deleteProduct = async (body: any) => {
-    try{
-        const {username,password,name,phone} = body
-        let result = await prisma.user.create({
-            data:{username,password,name,phone}
-        })
-        return(result)
-        
-    }catch (e){
-        return("bad")
-    }
-}
+  const { name, price, unit, weight, pieces, categoryId, storeId, id } = body;
+  let result = await prisma.product.update({
+    where: {
+      id: id,
+    },
+    data: {
+      name: name,
+      storeId: storeId,
+      price: price,
+      unit: unit,
+      weight: weight,
+      pieces: pieces,
+      categoryId: categoryId,
+    },
+  });
+  return result;
+};
 
-export default {createProduct,updateProduct}
+const deleteProduct = async (params: any) => {
+  const { id } = params;
+  let result = await prisma.product.delete({
+    where: { id: id },
+  });
+  return result;
+};
+
+const findProduct = async (params: any) => {
+  const { id } = params;
+  let result = await prisma.product.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return result;
+};
+
+const listProducts = async (params: any) => {
+    console.log(params);
+    
+    let query =generateQuery(params)
+    console.log(query);
+    
+  let result = await prisma.product.findMany(query);
+  return result;
+};
+
+const generateQuery = (params: any) => {
+    debugger;
+  let { storeId, categoryId } = params;
+  console.log(storeId, categoryId);
+  
+  let query = {};
+  if (!storeId && !categoryId) {
+    return query;
+  }
+  if (storeId && categoryId) {
+    query = {
+      where: {
+        AND: {
+          storeId: storeId,
+          categoryId: categoryId,
+        },
+      },
+    };
+  }
+  else if (storeId) {
+    query = {
+      where: {
+        storeId: storeId,
+      },
+    };
+  }
+  else if (categoryId) {
+    query = {
+      where: {
+        categoryId: categoryId,
+      },
+    };
+  }
+  console.log(query);
+  
+  return query;
+};
+
+export default {
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  findProduct,
+  listProducts,
+};

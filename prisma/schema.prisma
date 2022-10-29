@@ -34,8 +34,8 @@ model product {
   unit       unit
   weight     Decimal?
   pieces     Int?
-  category   category             @relation(fields: [categoryId], references: [id])
-  categoryId String
+  category   category?            @relation(fields: [categoryId], references: [id])
+  categoryId String?
   orders     products_on_orders[]
 }
 
@@ -47,14 +47,15 @@ enum unit {
 
 model store {
   id       String    @id @default(uuid())
-  name     String
+  name     String    @unique
   products product[]
 }
 
 model category {
   id       String    @id @default(uuid())
-  name     String
+  name     String    @unique
   products product[]
+  active   Boolean   @default(true)
 }
 
 model client {
@@ -72,8 +73,9 @@ model order {
   clientId String
   products products_on_orders[]
   total    Decimal
-  status   status
-  date     DateTime
+  status   status               @default(ON_TIME)
+  date     DateTime             @default(now()) @db.Date
+  payments payments[]
 }
 
 model products_on_orders {
@@ -90,4 +92,12 @@ enum status {
   ON_TIME
   DELAYED
   PAYED
+}
+
+model payments {
+  id      String   @id @default(uuid())
+  amount  Decimal
+  order   order    @relation(fields: [orderId], references: [id])
+  orderId String
+  date    DateTime @default(now()) @db.Date
 }
