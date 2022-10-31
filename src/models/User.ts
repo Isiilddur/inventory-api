@@ -1,9 +1,9 @@
 export default class User {
-  id: string;
+  id: string | undefined;
   username: string;
   password: string;
   name: string;
-  phone: string;
+  phone: string | undefined;
   role: string;
 
   constructor(username: string, password: string, name: string, role: string, phone?: string , id?: string){
