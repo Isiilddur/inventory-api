@@ -10,7 +10,7 @@ export default class Server {
     app: any;
     constructor() {
         this.app = express();
-        this.PORT = 8080;
+        this.PORT = 3030;
         //this.app.use(express.urlencoded({ limit: "50mb", parameterLimit: 500000000 }));
         //this.app.use(express.json({ limit: "50mb", parameterLimit: 500000000 }));
         this.middlewares();
