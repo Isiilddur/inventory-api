@@ -3,7 +3,9 @@ import express from 'express';
 import routes from '../routes/routes';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-
+import * as cron from 'node-cron';
+import { Client } from '@twilio/conversations';
+import twilioService from '../services/twilio.service';
 export default class Server {
 
     PORT: any;
@@ -15,7 +17,8 @@ export default class Server {
         //this.app.use(express.json({ limit: "50mb", parameterLimit: 500000000 }));
         this.middlewares();
         this.routesConfig();
-
+        //this.task.start()
+        
     }
 
     middlewares(){
@@ -34,4 +37,11 @@ export default class Server {
             console.log(`Aplicación corriendo en puerto ${this.PORT}`)
         })
     }
+
+    // task = cron.schedule("*/10 * * * * *", ()=> {
+    //     console.log("Executing...")
+    //     twilioService.getMessageToSend()
+
+    // })
+    
 }

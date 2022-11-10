@@ -45,4 +45,9 @@ orderRoutes.get(
 
 orderRoutes.get("/datesFilt/orders", orderController.listOrdersBetweenDates);
 
+orderRoutes.get(
+  "/orders/clients/status",
+  orderController.getClientStatusOnOrders
+);
+
 export default orderRoutes;

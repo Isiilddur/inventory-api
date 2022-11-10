@@ -6,8 +6,7 @@ import clientController from '../controllers/client.controller';
 import validateFields from '../middlewares/validate-fields'
 
 let validationClient : any[]= [
-    check('clientId', 'El cliente es necesario').exists(),
-    check('products', 'Debe tener al menos un producto').isArray(),
+    check('name', 'El nombre es necesario').exists(),
     validateFields
 ]
 

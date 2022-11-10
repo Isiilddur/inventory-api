@@ -15,13 +15,22 @@ const ordesToReceive = async (req: any, res: any) => {
   }
 };
 const incomeByDate = async (req: any, res: any) => {
-    try {
-      let result = await dashboardService.incomeByDate(req.query);
-      res.status(200).send(result);
-    } catch (error) {
-      res.status(400).send(error);
-    }
-  };
+  try {
+    let result = await dashboardService.incomeByDate(req.query);
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+const dataByStore = async (req: any, res: any) => {
+  try {
+    let result = await dashboardService.dataByStore( req.query,req.params,);
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
 
 // const updateOrder = async (req: any, res: any) => {
 //   try {
@@ -44,7 +53,7 @@ const incomeByDate = async (req: any, res: any) => {
 // const listOrders = async (req: any, res: any) => {
 //   try {
 //       (req);
-      
+
 //     let result = await orderService.listOrders();
 //     res.status(200).send(result);
 //   } catch (error) {
@@ -90,7 +99,7 @@ const incomeByDate = async (req: any, res: any) => {
 // }
 
 export default {
-    ordesToReceive,
-    incomeByDate
-  
+  ordesToReceive,
+  incomeByDate,
+  dataByStore,
 };

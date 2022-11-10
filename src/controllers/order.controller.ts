@@ -81,6 +81,15 @@ const listOrdersBetweenDates = async (req: any, res: any) => {
     }
 }
 
+const getClientStatusOnOrders = async (req: any, res: any) => {
+  try {
+    let result = await orderService.getStatusClient();
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
 export default {
   createOrder,
   updateOrder,
@@ -89,5 +98,6 @@ export default {
   listOrdersByClient,
   listOrdersByStatus,
   getOrder,
-  listOrdersBetweenDates
+  listOrdersBetweenDates,
+  getClientStatusOnOrders
 };

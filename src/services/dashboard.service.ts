@@ -48,22 +48,62 @@ const incomeByDate = async (params: any) => {
   }
 };
 
-const updateClient = async (body: any, params: any) => {
-  const { name, rfc, phone, address } = body;
-  let result = await prisma.client.update({
+const dataByStore = async (query: any, params: any) => {
+  const { id } = params;
+  const { range } = query;
+  let dates : string[]= getDate(range)
+  let data : any = {
+    total: 0,
+    payed: 0,
+    debt: 0
+  }
+  console.log(id);
+  
+  let result = await prisma.order.aggregate({
     where: {
-      id: params.id,
+      AND:{
+        storeId:id,
+        date:{
+          gte:new Date(dates[0]),
+          lte:new Date(dates[1])
+        }
+      }
     },
-    data: {
-      name: name,
-      rfc: rfc,
-      phone: phone,
-      address: address,
+    _sum: {
+      debt: true,
+      payed: true,
+      total: true
     },
   });
   return result;
 };
 
+const  getDate  = (range: string) : string[] => {
+  let date = new Date()
+  let temp;
+  switch (range) {
+    case "MONTH":
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear()
+      let endMonth = month == 12 ? 1 : month+1;
+      let endYear = endMonth == 12 ? year+1 : year;
+      let initDate  = year.toString() + "-" + month.toString() + "-" + "1"
+      let endDate  = endYear.toString() + "-" + endMonth.toString() + "-" + "1"
+
+      return [initDate, endDate]
+      break;
+    case "YEAR":
+      let year2 = date.getFullYear()
+      let endYear2 =year2+1;
+      let initDate2  = year2.toString() + "-01-1"
+      let endDate2  = endYear2.toString() + "-01-1"
+
+      return [initDate2, endDate2]
+    default:
+      return ["2022-01-01", date.toISOString()]
+      break;
+  }
+};
 const deleteClient = async (params: any) => {
   const { id } = params;
   let result = await prisma.client.delete({
@@ -92,4 +132,5 @@ const getClient = async (params: any) => {
 export default {
   ordesToReceive,
   incomeByDate,
+  dataByStore
 };

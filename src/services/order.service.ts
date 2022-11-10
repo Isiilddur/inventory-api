@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime";
 
 const prisma = new PrismaClient();
-
+const DAYS = 2;
 const createOrder = async (body: any) => {
   const { clientId, total, products } = body;
   let arrayOfProducts = generateArrayProducts(products);
@@ -14,6 +14,7 @@ const createOrder = async (body: any) => {
       products: {
         create: arrayOfProducts,
       },
+      debt: total
     },
   });
 
@@ -98,6 +99,38 @@ const listOrdersBetweenDates = async (params: any) => {
   return result;
 }
 
+const listOrdersWithMoreThanXDays = async () => {
+  let date = new Date()
+  date.setDate(date.getDate()-DAYS)
+  let result = await prisma.order.updateMany({
+    data:{
+      status: "DELAYED"
+    },
+    where: {
+      AND:{
+        date: {
+          lte:new Date(date),
+        },
+        NOT: {status: "PAYED"}
+      }
+    },
+  });
+  return result;
+}
+
+const getStatusClient = async () => {
+  let ordersDelayed = await prisma.order.groupBy({
+    by: ['clientId'],
+    where: {
+      NOT:{status: "PAYED"}
+    },
+    _sum: {
+      debt: true,
+    },
+  })
+  return ordersDelayed 
+}
+
 export default {
   createOrder,
   updateOrder,
@@ -106,5 +139,7 @@ export default {
   getOrder,
   listOrdersByClient,
   listOrdersByStatus,
-  listOrdersBetweenDates
+  listOrdersBetweenDates,
+  listOrdersWithMoreThanXDays,
+  getStatusClient
 };
