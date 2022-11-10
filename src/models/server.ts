@@ -4,7 +4,6 @@ import routes from '../routes/routes';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import * as cron from 'node-cron';
-import { Client } from '@twilio/conversations';
 import twilioService from '../services/twilio.service';
 export default class Server {
 
