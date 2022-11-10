@@ -57,7 +57,7 @@ const dataByStore = async (query: any, params: any) => {
     payed: 0,
     debt: 0
   }
-  console.log(id);
+  console.log(dates);
   
   let result = await prisma.order.aggregate({
     where: {
@@ -100,7 +100,9 @@ const  getDate  = (range: string) : string[] => {
 
       return [initDate2, endDate2]
     default:
-      return ["2022-01-01", date.toISOString()]
+      console.log("AQUI");
+      
+      return ["2022-01-01", date.toLocaleDateString()]
       break;
   }
 };

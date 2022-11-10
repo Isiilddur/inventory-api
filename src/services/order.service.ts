@@ -4,7 +4,7 @@ import { Decimal } from "@prisma/client/runtime";
 const prisma = new PrismaClient();
 const DAYS = 2;
 const createOrder = async (body: any) => {
-  const { clientId, total, products } = body;
+  const { clientId, total, products, storeId } = body;
   let arrayOfProducts = generateArrayProducts(products);
 
   let result = await prisma.order.create({
@@ -14,7 +14,8 @@ const createOrder = async (body: any) => {
       products: {
         create: arrayOfProducts,
       },
-      debt: total
+      debt: total,
+      storeId: storeId
     },
   });
 
