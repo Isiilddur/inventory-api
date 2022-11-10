@@ -1,4 +1,3 @@
-import { Client } from "@twilio/conversations";
 import { Twilio } from "twilio";
 import orderService from "./order.service";
 import paymentService from "./payment.service"
