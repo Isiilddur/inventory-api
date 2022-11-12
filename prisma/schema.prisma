@@ -30,19 +30,11 @@ model product {
   name       String
   store      store                @relation(fields: [storeId], references: [id])
   storeId    String
-  price      Decimal
-  unit       unit
-  weight     Decimal?
-  pieces     Int?
   category   category?            @relation(fields: [categoryId], references: [id])
   categoryId String?
   orders     products_on_orders[]
-}
-
-enum unit {
-  KILOS
-  GRAMOS
-  PIEZAS
+  stock      Decimal              @default(0)
+  items      item_sold[]
 }
 
 model store {
@@ -53,10 +45,11 @@ model store {
 }
 
 model category {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  products product[]
-  active   Boolean   @default(true)
+  id                 String               @id @default(uuid())
+  name               String               @unique
+  products           product[]
+  active             Boolean              @default(true)
+  products_on_orders products_on_orders[]
 }
 
 model client {
@@ -80,15 +73,19 @@ model order {
   payments payments[]
   debt     Decimal
   store    store?               @relation(fields: [storeId], references: [id])
-  storeId  String?              
+  storeId  String?
 }
 
 model products_on_orders {
-  product   product @relation(fields: [productId], references: [id])
-  productId String
-  order     order   @relation(fields: [orderId], references: [id])
-  orderId   String
-  quantity  Int
+  product    product   @relation(fields: [productId], references: [id])
+  productId  String
+  order      order     @relation(fields: [orderId], references: [id])
+  orderId    String
+  category   category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  date       DateTime  @default(now())
+  quantity   Int
+  price      Decimal   @default(0)
 
   @@id([productId, orderId])
 }
@@ -106,4 +103,11 @@ model payments {
   orderId  String
   date     DateTime @default(now()) @db.Date
   clientId String
+}
+
+model item_sold {
+  id        String  @id @default(uuid())
+  product   product @relation(fields: [productId], references: [id])
+  productId String
+  price     Decimal
 }

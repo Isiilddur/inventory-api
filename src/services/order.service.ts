@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime";
+import productService from "./product.service";
 
 const prisma = new PrismaClient();
 const DAYS = 2;
@@ -15,18 +16,29 @@ const createOrder = async (body: any) => {
         create: arrayOfProducts,
       },
       debt: total,
-      storeId: storeId
+      storeId: storeId,
+      date: new Date(new Date().toLocaleDateString())
     },
+  }).then( async () => {
+    await reduceStock(arrayOfProducts);
   });
-
   return result;
 };
+
+const reduceStock = async (products: any[]) => {
+  for(let product of products){
+   await productService.decreaseStock(product.productId, product.quantity)
+  }
+}
 
 const generateArrayProducts = (products: any[]) => {
   return products.map((product) => {
     return {
       productId: product.id,
       quantity: product.quantity,
+      price: product.price * product.quantity,
+      categoryId: product.categoryId,
+      date: new Date(new Date().toLocaleDateString())
     };
   });
 };

@@ -1,4 +1,5 @@
-import { PrismaClient, unit } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime";
 
 const prisma = new PrismaClient();
 
@@ -10,7 +11,7 @@ const createProduct = async (body: any) => {
 };
 
 const updateProduct = async (body: any) => {
-  const { name, price, unit, weight, pieces, categoryId, storeId, id } = body;
+  const { name, categoryId, storeId, id } = body;
   let result = await prisma.product.update({
     where: {
       id: id,
@@ -18,10 +19,6 @@ const updateProduct = async (body: any) => {
     data: {
       name: name,
       storeId: storeId,
-      price: price,
-      unit: unit,
-      weight: weight,
-      pieces: pieces,
       categoryId: categoryId,
     },
   });
@@ -54,6 +51,40 @@ const listProducts = async (params: any) => {
     
   let result = await prisma.product.findMany(query);
   return result;
+};
+
+const increaseStock = async (body: any, params: any) => {
+  const { id } = params;
+  const { amount } = body;
+
+  let query =generateQuery(params)
+  console.log(query);
+  
+let result = await prisma.product.findUniqueOrThrow({
+  where:{
+    id: id
+  }
+})
+  result = await prisma.product.update({
+    data:{stock:result?.stock + amount},
+    where: {id:id}
+  });
+  return result;
+};
+
+const decreaseStock = async (id: any, amount: number) => {
+  
+let result = await prisma.product.findUniqueOrThrow({
+  where:{
+    id: id
+  }
+})
+let decimalAmount = new Decimal(result?.stock).minus(amount)
+  result = await prisma.product.update({
+    data:{stock:decimalAmount},
+    where: {id:id}
+  });
+  return decimalAmount;
 };
 
 const generateQuery = (params: any) => {
@@ -100,4 +131,6 @@ export default {
   deleteProduct,
   findProduct,
   listProducts,
+  increaseStock,
+  decreaseStock
 };

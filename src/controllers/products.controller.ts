@@ -36,6 +36,12 @@ const listProducts = async (req: any, res: any) => {
     let result = await productService.listProducts(req.query)
     res.status(200).send(result)
 }
+const increaseStock = async (req: any, res: any) => {
+    console.log(req); 
+    
+    let result = await productService.increaseStock(req.body, req.params)
+    res.status(200).send(result)
+}
 
 
 
@@ -45,5 +51,5 @@ export default {
     findProduct,
     listProducts,
     deleteProduct,
-    
+    increaseStock
 }

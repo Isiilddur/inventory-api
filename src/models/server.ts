@@ -37,9 +37,9 @@ export default class Server {
         })
     }
 
-    // task = cron.schedule("*/10 * * * * *", ()=> {
-    //     console.log("Executing...")
-    //     twilioService.getMessageToSend()
+    //  task = cron.schedule("* * * 11 00 *", ()=> {
+    //      console.log("Executing...")
+    //      twilioService.getMessageToSend()
 
     // })
     

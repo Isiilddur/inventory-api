@@ -20,6 +20,7 @@ const idValidation: any[] = [
 dashboardRoutes.get("/dashboard/ordersToReceive", dashboardController.ordesToReceive);
 dashboardRoutes.get("/dashboard/incomeByDate", dashboardController.incomeByDate);
 dashboardRoutes.get("/dashboard/dataByStore/:id", dashboardController.dataByStore);
+dashboardRoutes.get("/dashboard/getMoneyByCategoryAndDay", dashboardController.getMoneyByCategoryAndDay);
 
 
 

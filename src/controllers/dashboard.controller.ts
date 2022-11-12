@@ -32,6 +32,16 @@ const dataByStore = async (req: any, res: any) => {
   }
 };
 
+const getMoneyByCategoryAndDay = async (req: any, res: any) => {
+  try {
+    let result = await dashboardService.getMoneyByCategoryAndDay( req.query);
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+
 // const updateOrder = async (req: any, res: any) => {
 //   try {
 //     let result = await orderService.updateOrder(req.body, req.params);
@@ -102,4 +112,5 @@ export default {
   ordesToReceive,
   incomeByDate,
   dataByStore,
+  getMoneyByCategoryAndDay
 };
