@@ -6,14 +6,14 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_PHONE_NUMBER;
 const myNumber = process.env.MY_NUMBER;
 
-const client = new Twilio("ACcc6b5e3e6bbbb36b8249f2457b9dfb72", "f576692fdc6d1df9895d3ebdc22bc727");
+const client = new Twilio("ACcc6b5e3e6bbbb36b8249f2457b9dfb72", authToken!);
 
 const sendMessage = (message: string) =>{
     client.messages 
       .create({ 
          body: message,  
          messagingServiceSid: 'MGe050dbfecd61a9b21a93ce3224a53188',      
-         to: '+525525008170',
+         to: '+525531184975',
          from: '+18585443793'
        }) 
       .then(message => console.log(message.sid)).catch(err => console.log(err))

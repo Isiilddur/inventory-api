@@ -3,7 +3,7 @@ import { Decimal } from "@prisma/client/runtime";
 import productService from "./product.service";
 
 const prisma = new PrismaClient();
-const DAYS = 2;
+const DAYS = 3;
 const createOrder = async (body: any) => {
   const { clientId, total, products, storeId } = body;
   let arrayOfProducts = generateArrayProducts(products);
