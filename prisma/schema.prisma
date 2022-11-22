@@ -84,7 +84,7 @@ model products_on_orders {
   category   category? @relation(fields: [categoryId], references: [id])
   categoryId String?
   date       DateTime  @default(now())
-  quantity   Int
+  quantity   Decimal
   price      Decimal   @default(0)
 
   @@id([productId, orderId])
