@@ -72,7 +72,7 @@ let result = await prisma.product.findUniqueOrThrow({
   }
 })
   result = await prisma.product.update({
-    data:{stock:result?.stock + amount},
+    data:{stock:new Decimal(result?.stock).plus(amount)},
     where: {id:id}
   });
   return result;
