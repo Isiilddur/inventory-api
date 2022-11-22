@@ -1,5 +1,6 @@
 'use strict'
 
+import e from "cors";
 import productService from "../services/product.service";
 /**
  * @author Luis Montes
@@ -21,8 +22,12 @@ const updateProduct = async (req: any, res: any) => {
 }
 
 const deleteProduct = async (req: any, res: any) => {
-    let result = await productService.deleteProduct(req.params)
-    res.status(200).send(result)
+    await productService.deleteProduct(req.params).then(result => {
+        res.status(200).send(result)
+
+    }).catch(err => {
+        res.status(400).send({msg:"Este producto ya tiene ordenes."})
+    })
 }
 
 const findProduct = async (req: any, res: any) => {

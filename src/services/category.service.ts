@@ -27,13 +27,18 @@ const updateCategory = async (body: any, params: any) => {
 };
 
 const deleteCategory = async (params: any) => {
-  const { id } = params;
+  try {
+    const { id } = params;
   let result = await prisma.category.delete({
     where: {
       id: id,
     },
   });
   return result;
+  } catch (error) {
+    throw new Error("Esta categoria tiene productos.")
+  }
+  
 };
 
 const listCategories = async () => {

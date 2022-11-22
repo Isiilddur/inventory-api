@@ -22,12 +22,13 @@ const updateCategory = async (req: any, res: any) => {
 };
 
 const deleteCategory = async (req: any, res: any) => {
-  try {
-    let result = await categoryService.deleteCategory(req.params);
-    res.status(200).send(result);
-  } catch (error) {
+  
+     await categoryService.deleteCategory(req.params).then(result => {
+      res.status(200).send(result);
+
+    }).catch(error => {
     res.status(400).send(error);
-  }
+  })
 };
 
 const listCategories = async (req: any, res: any) => {

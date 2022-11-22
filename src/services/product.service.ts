@@ -26,11 +26,17 @@ const updateProduct = async (body: any) => {
 };
 
 const deleteProduct = async (params: any) => {
+
   const { id } = params;
-  let result = await prisma.product.delete({
-    where: { id: id },
-  });
-  return result;
+  try {
+    let result = await prisma.product.delete({
+      where: { id: id },
+    });
+    return result;
+  } catch (error) {
+    throw new Error("Este producto está relacionado a mas ordenes")
+  }
+  
 };
 
 const findProduct = async (params: any) => {
