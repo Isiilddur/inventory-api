@@ -12,7 +12,7 @@ let validationProduct : any[]= [
 ]
 
 const idValidation: any[]= [
-    check('id', 'El Id no es valido o no existe').exists().isUUID(),
+    check('id', 'El Id no es valido o no existe').exists(),
  ]
 productsRoutes.post('/product', validationProduct, productsController.createProduct);
 productsRoutes.post('/product/stock/:id', idValidation.concat(validateFields), productsController.increaseStock);
