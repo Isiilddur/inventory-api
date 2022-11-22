@@ -6,7 +6,7 @@ import validateFields from '../middlewares/validate-fields';
 
 let validationProduct : any[]= [
     check('name', 'El nombre es necesario').exists(),
-    check('storeId', 'Es necesario asignar a una tienda').exists().isUUID(),
+    check('storeId', 'Es necesario asignar a una tienda').exists(),
     check('categoryId', 'Es necesario asignar una categoria').exists(),
     validateFields
 ]
