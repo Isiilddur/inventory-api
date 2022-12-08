@@ -59,6 +59,16 @@ const listProducts = async (params: any) => {
   return result;
 };
 
+const listProductsInOrder = async (params: any) => {
+  
+  let {id} = params
+  
+let result = await prisma.products_on_orders.findMany({
+  where: {orderId:id}, include:{product: true}
+});
+return result;
+};
+
 const increaseStock = async (body: any, params: any) => {
   const { id } = params;
   const { amount } = body;
@@ -72,7 +82,7 @@ let result = await prisma.product.findUniqueOrThrow({
   }
 })
   result = await prisma.product.update({
-    data:{stock:new Decimal(result?.stock).plus(amount)},
+    data:{stock:new Decimal(result?.stock).plus(amount) },
     where: {id:id}
   });
   return result;
@@ -138,5 +148,6 @@ export default {
   findProduct,
   listProducts,
   increaseStock,
-  decreaseStock
+  decreaseStock,
+  listProductsInOrder
 };

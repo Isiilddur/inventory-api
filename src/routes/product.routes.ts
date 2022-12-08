@@ -20,5 +20,8 @@ productsRoutes.put('/product/:id', idValidation.concat(validationProduct), produ
 productsRoutes.delete('/product/:id', idValidation, productsController.deleteProduct);
 productsRoutes.get('/product/:id', idValidation, productsController.findProduct);
 productsRoutes.get('/products', productsController.listProducts);
+productsRoutes.get('/products/order/:id', productsController.listProductsInOrder);
+
+
 
 export default productsRoutes;
