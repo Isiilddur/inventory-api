@@ -16,11 +16,7 @@ const idValidation: any[] = [
 ];
 
 orderRoutes.post("/order", validationOrder, orderController.createOrder);
-orderRoutes.put(
-  "/order/:id",
-  idValidation.concat(validationOrder),
-  orderController.updateOrder
-);
+
 orderRoutes.delete(
   "/order/:id",
   idValidation.concat(validateFields),
@@ -45,9 +41,6 @@ orderRoutes.get(
 
 orderRoutes.get("/datesFilt/orders", orderController.listOrdersBetweenDates);
 
-orderRoutes.get(
-  "/orders/clients/status",
-  orderController.getClientStatusOnOrders
-);
+
 
 export default orderRoutes;

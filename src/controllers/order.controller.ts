@@ -15,14 +15,6 @@ const createOrder = async (req: any, res: any) => {
   }
 };
 
-const updateOrder = async (req: any, res: any) => {
-  try {
-    let result = await orderService.updateOrder(req.body, req.params);
-    res.status(200).send(result);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-};
 
 const deleteOrder = async (req: any, res: any) => {
   try {
@@ -81,23 +73,14 @@ const listOrdersBetweenDates = async (req: any, res: any) => {
     }
 }
 
-const getClientStatusOnOrders = async (req: any, res: any) => {
-  try {
-    let result = await orderService.getStatusClient();
-    res.status(200).send(result);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-};
+
 
 export default {
   createOrder,
-  updateOrder,
   deleteOrder,
   listOrders,
   listOrdersByClient,
   listOrdersByStatus,
   getOrder,
   listOrdersBetweenDates,
-  getClientStatusOnOrders
 };

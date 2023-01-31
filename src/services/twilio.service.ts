@@ -1,6 +1,7 @@
 import { Twilio } from "twilio";
 import orderService from "./order.service";
 import paymentService from "./payment.service"
+import clientService from "./client.service";
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_PHONE_NUMBER;
@@ -20,7 +21,7 @@ const sendMessage = (message: string, phone:string) =>{
 }
 
 const getMessageToSend = async() => {
-  await orderService.listOrdersWithMoreThanXDays()
+  await clientService.listClientsWithMoreThanXDays()
   let res = await paymentService.getClientsWithDebths()
   console.log(res);
   

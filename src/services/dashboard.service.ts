@@ -4,17 +4,8 @@ import { group } from "console";
 const prisma = new PrismaClient();
 
 const ordesToReceive = async () => {
-  let result = await prisma.order.findMany({
-    where: {
-      OR: {
-        status: {
-          in: ["ON_TIME", "DELAYED"],
-        },
-      },
-    },
-  });
+  
 
-  return result;
 };
 const incomeByDate = async (params: any) => {
   let { initDate, endDate, payed } = params;
@@ -29,9 +20,7 @@ const incomeByDate = async (params: any) => {
           date: {
             gte: new Date(initDate),
             lte: new Date(endDate),
-          },
-          status: "PAYED",
-        },
+          }        },
       },
     });
   } else {
@@ -69,12 +58,25 @@ const dataByStore = async (query: any, params: any) => {
       },
     },
     _sum: {
-      debt: true,
-      payed: true,
       total: true,
     },
   });
-  return result;
+  let payments = await prisma.payments.aggregate({
+    where:{ 
+      date: {
+        gte: new Date(date1),
+        lte: getSunday(),
+      },
+    },
+    _sum:{
+      amount: true
+    }
+  })
+  return {_sum:{
+    total:result._sum.total,
+    payed: payments._sum.amount,
+    debt: Number(result._sum.total)-Number(payments._sum.amount)
+  }};
 };
 
 const getDate = (range: string): string[] => {

@@ -32,6 +32,24 @@ const updateClient = async (body: any, params: any) => {
   return result;
 };
 
+const updateClientDebt = async (clientId: string, total: number) => {
+  let client =await prisma.client.findFirst({where:{id:clientId}})
+  let debt = Number(client?.debt) - total
+
+  let result = await prisma.client.update({
+    where: {
+      id: clientId
+    },
+    data: {
+      debt: debt,
+      status: "ON_TIME"
+    },
+  });
+  return result;
+};
+
+
+
 const deleteClient = async (params: any) => {
   const { id } = params;
   let result = await prisma.client.delete({
@@ -57,10 +75,33 @@ const getClient = async (params: any) => {
   return result;
 };
 
+const listClientsWithMoreThanXDays = async () => {
+  let date = new Date()
+  date.setDate(date.getDate()-3)
+  let result = await prisma.client.updateMany({
+    data:{
+      status:"DELAYED"
+    },
+    where:{
+      AND: {
+        lastStatusUpdate:{
+          lte:date,
+        },
+        debt:{
+          gt:0
+        }
+      }
+    }
+  })
+  return result;
+}
+
 export default {
   createClient,
   updateClient,
   deleteClient,
   listClients,
   getClient,
+  updateClientDebt,
+  listClientsWithMoreThanXDays
 };

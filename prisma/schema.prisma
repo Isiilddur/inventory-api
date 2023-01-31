@@ -59,6 +59,10 @@ model client {
   phone   String?
   address String?
   orders  order[]
+  debt    Decimal @default(0.0)
+  status   status               @default(ON_TIME)
+  lastStatusUpdate  DateTime  @default(now()) @db.Date
+
 }
 
 model order {
@@ -67,11 +71,7 @@ model order {
   clientId String
   products products_on_orders[]
   total    Decimal
-  status   status               @default(ON_TIME)
   date     DateTime             @default(now()) @db.Date
-  payed    Decimal              @default(0.0)
-  payments payments[]
-  debt     Decimal
   store    store?               @relation(fields: [storeId], references: [id])
   storeId  String?
 }
@@ -99,8 +99,6 @@ enum status {
 model payments {
   id       String   @id @default(uuid())
   amount   Decimal
-  order    order    @relation(fields: [orderId], references: [id])
-  orderId  String
   date     DateTime @default(now()) @db.Date
   clientId String
 }

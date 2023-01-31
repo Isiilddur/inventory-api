@@ -6,13 +6,10 @@ import orderService from "./order.service";
 const prisma = new PrismaClient();
 
 const getClientsWithDebths = async () => {
-    let result = await prisma.order.findMany({
+    let result = await prisma.client.findMany({
         where:{
             status: "DELAYED"
         },
-        include:{
-            client: true
-        }
     })
     return buildMessage(result)
 }
@@ -24,31 +21,31 @@ const buildMessage = (result: any[]) => {
     return "SIN ADEUDOS"
     for(let item of result){
         counter++;
-        resStr += counter + ". " +  item.client.name + " \t $" + (item.total - item.payed) + "\n"
+        resStr += counter + ". " +  item.name + " \t $" + (item.debt) + "\n"
     }
     return resStr;
 
 }
 
 const createPayment = async (body: any) => {
-    const { amount, orderId, clientId } = body;
+    const { amount, clientId } = body;
     let result = await prisma.payments.create({
       data: {
         amount: amount,
-        orderId: orderId,
         clientId: clientId
       },
     })
-    let order = await orderService.getOrder({id:orderId})
-    let payed = Number(order.payed) + Number(amount)
-    console.log(amount + " " + payed);
-    let debt = Number(order.total) - payed
-    let status = payed >= Number(order.total) ? "PAYED" : order.status;
-    await prisma.order.update
+    let client = await prisma.client.findUnique({
+      where:{
+        id:clientId
+      }
+    })
+    let debt = Number(client?.debt) - amount
+    let status = debt >= 0 ? "PAYED" : client?.status;
+    await prisma.client.update
     ({
-      where: {id:orderId},
+      where: {id:clientId},
       data:{
-        payed : payed,
         status: status,
         debt: debt
       }
@@ -64,7 +61,6 @@ const createPayment = async (body: any) => {
       },
       data: {
         amount: amount,
-        orderId: orderId
       },
     });
     return result;
