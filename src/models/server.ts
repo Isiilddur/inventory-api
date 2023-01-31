@@ -5,6 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import * as cron from 'node-cron';
 import twilioService from '../services/twilio.service';
+import fs from 'fs';
 export default class Server {
 
     PORT: any;
@@ -29,6 +30,9 @@ export default class Server {
 
     routesConfig(){
         this.app.use('/api/v1', routes)
+        this.app.get('/.well-known/pki-validation/DCCEB1195C505D9D86853D73FA312A83.txt', (req:any,res:any)=>{
+            res.sendFile('/home/ubuntu/inventory-api/DCCEB1195C505D9D86853D73FA312A83.txt')
+        })
     }
 
     startListen(){
