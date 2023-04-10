@@ -6,10 +6,16 @@ import bodyParser from 'body-parser';
 import * as cron from 'node-cron';
 import twilioService from '../services/twilio.service';
 import fs from 'fs';
+import https from 'https';
+
 export default class Server {
 
+    
     PORT: any;
     app: any;
+    key: any;
+    cert: any;
+    cred: any;
     constructor() {
         this.app = express();
         this.PORT = 3030;
@@ -17,6 +23,9 @@ export default class Server {
         //this.app.use(express.json({ limit: "50mb", parameterLimit: 500000000 }));
         this.middlewares();
         this.routesConfig();
+        this.key = fs.readFileSync('../../private.key');
+        this.cert = fs.readFileSync('../../certificate.crt')
+        this.cred = {key: this.key , cert: this.cert};
         //this.task.start()
         
     }
@@ -39,6 +48,9 @@ export default class Server {
         this.app.listen(this.PORT, () => {
             console.log(`Aplicación corriendo en puerto ${this.PORT}`)
         })
+
+        const httpsServer = https.createServer(this.cred, this.app)
+        httpsServer.listen(5443);
     }
 
      task = cron.schedule("00 11 * * *", ()=> {
