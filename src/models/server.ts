@@ -30,8 +30,8 @@ export default class Server {
 
     routesConfig(){
         this.app.use('/api/v1', routes)
-        this.app.get('/.well-known/pki-validation/DCCEB1195C505D9D86853D73FA312A83.txt', (req:any,res:any)=>{
-            res.sendFile('/home/ubuntu/inventory-api/DCCEB1195C505D9D86853D73FA312A83.txt')
+        this.app.get('/.well-known/pki-validation/E25B859D1C44A8E65C597069B74A1073.txt', (req:any,res:any)=>{
+            res.sendFile('/home/ubuntu/inventory-api/E25B859D1C44A8E65C597069B74A1073.txt')
         })
     }
 
