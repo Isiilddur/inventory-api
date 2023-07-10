@@ -23,8 +23,8 @@ export default class Server {
         //this.app.use(express.json({ limit: "50mb", parameterLimit: 500000000 }));
         this.middlewares();
         this.routesConfig();
-        this.key = fs.readFileSync('../../private.key');
-        this.cert = fs.readFileSync('../../certificate.crt')
+        this.key = fs.readFileSync('private.key');
+        this.cert = fs.readFileSync('certificate.crt')
         this.cred = {key: this.key , cert: this.cert};
         //this.task.start()
         
@@ -32,7 +32,12 @@ export default class Server {
 
     middlewares(){
         // CORS
-        this.app.use(cors())
+        const allowedOrigins = ['http://avicolaflozar.com.mx'];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+};
+        this.app.use(cors(options))
         // Read and Parse of body
         this.app.use(express.json())
     }
