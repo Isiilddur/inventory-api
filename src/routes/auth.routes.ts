@@ -15,7 +15,7 @@ const validateCreate = [
     check('password', 'El password es requerido').not().isEmpty(),
     check('name', 'El nombre es requerido').not().isEmpty(),
 
-    validateFields, validateJWT]
+    validateFields]
      
 authRoutes.post('/login', validateLogin, authControlloer.login)
 authRoutes.post('/register', validateCreate, authControlloer.createUser)

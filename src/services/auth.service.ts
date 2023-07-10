@@ -6,7 +6,7 @@ import { resolve } from "path";
 const prisma = new PrismaClient();
 
 const login = async (body: any) => {
-  const { username, password } = body;
+  let { username, password } = body;
   const user = await prisma.user.findUniqueOrThrow({
     where: {
       username: username,
@@ -15,9 +15,9 @@ const login = async (body: any) => {
   const validPassword = await bcrypt.compare(password, user?.password);
   console.log(validPassword);
   
-  // if (!validPassword) {
-  //   throw new Error("Invalid User")
-  /*}else*/ return {jwt:generateJWT(user.id,user.username,user.role)}
+   if (!validPassword) {
+     throw new Error("Invalid User")
+  }else return {jwt:generateJWT(user.id,user.username,user.role)}
 };
 
 const createUser = async (body: any) => {
