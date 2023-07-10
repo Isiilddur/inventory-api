@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { log } from "console";
 
 const prisma = new PrismaClient();
 
@@ -34,8 +35,12 @@ const updateClient = async (body: any, params: any) => {
 
 const updateClientDebt = async (clientId: string, total: number) => {
   let client =await prisma.client.findFirst({where:{id:clientId}})
-  let debt = Number(client?.debt) - total
+  console.log(total);
+  
+  let debt = Number(client?.debt) + Number(total)
 
+  console.log(debt);
+  
   let result = await prisma.client.update({
     where: {
       id: clientId

@@ -7,7 +7,6 @@ import validateFields from '../middlewares/validate-fields'
 
 let validationPayment : any[]= [
     check('amount', 'El monto es necesario').exists(),
-    check('orderId', 'El id de la orden es necesario').exists(),
     check('clientId', 'El id del cliente es necesario').exists(),
 
     validateFields

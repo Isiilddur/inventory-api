@@ -2,6 +2,7 @@
 import { order, PrismaClient } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime";
 import orderService from "./order.service";
+import { log } from "console";
 
 const prisma = new PrismaClient();
 
@@ -40,8 +41,8 @@ const createPayment = async (body: any) => {
         id:clientId
       }
     })
-    let debt = Number(client?.debt) - amount
-    let status = debt >= 0 ? "PAYED" : client?.status;
+    let debt = Number(client?.debt) - Number(amount)
+    let status = debt <= 0 ? "PAYED" : client?.status;
     await prisma.client.update
     ({
       where: {id:clientId},
@@ -92,10 +93,12 @@ const createPayment = async (body: any) => {
   };
 
   const getPaymentsByClient = async (params: any) => {
-    const { clientId } = params;
+    const { id } = params;
+    console.log(params);
+    
     let result = await prisma.payments.findMany({
       where: {
-        clientId: clientId,
+        clientId: id,
       },
     });
     return result;
